@@ -5,7 +5,7 @@ import "./globals.css";
 
 export default function RootLayout({
   children,
-}: React.PropsWithChildren<ob>) {
+}: React.PropsWithChildren<object>) {
   // Function to get the theme from local storage or default to system preference
   const getInitialTheme = () => {
     if (typeof window !== 'undefined') {
