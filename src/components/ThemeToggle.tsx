@@ -6,9 +6,16 @@ const ThemeToggle: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' || 'light';
-    setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    } else {
+      const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialTheme = prefersDarkScheme ? 'dark' : 'light';
+      setTheme(initialTheme);
+      document.documentElement.setAttribute('data-theme', initialTheme);
+    }
 
     // Remove the theme-transition class on initial load
     document.body.classList.remove('theme-transition');
