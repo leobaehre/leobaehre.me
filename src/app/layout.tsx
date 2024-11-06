@@ -5,11 +5,16 @@ import "./globals.css";
 
 export default function RootLayout({
   children,
-}: React.PropsWithChildren<object>) {
-  // Function to get the theme from local storage or default to 'light'
+}: React.PropsWithChildren<ob>) {
+  // Function to get the theme from local storage or default to system preference
   const getInitialTheme = () => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') || 'light';
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        return savedTheme;
+      }
+      const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return prefersDarkScheme ? 'dark' : 'light';
     }
     return 'light';
   };
@@ -18,7 +23,8 @@ export default function RootLayout({
   const initialTheme = getInitialTheme();
 
   useEffect(() => {
-    const theme = localStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem('theme');
+    const theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', theme);
   }, []);
 
